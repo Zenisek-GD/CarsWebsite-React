@@ -35,9 +35,9 @@ function App() {
 
   return (
     <div className="App">
-      <Navbar 
-        onExplore={handleExplore} 
-        onOrder={handleOrder} 
+      <Navbar
+        onExplore={handleExplore}
+        onOrder={handleOrder}
         onHome={handleHome}
         currentPage={currentPage}
       />
