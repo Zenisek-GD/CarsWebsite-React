@@ -1,20 +1,49 @@
-
-
-import { useState } from 'react'
-import MessageDisplay from './components/MessageDisplay';
-import PrimaryButton from './components/PrimaryButton';
-import './App.css'
-
+import React, { useState } from 'react';
+import LandingPage from './pages/LandingPage';
+import CarListing from './pages/carListing';
+import OrderPage from './pages/orderPage';
+import Navbar from './components/Navbar';
+import './App.css';
 
 function App() {
-  const [count, setCount] =useState(0);
-  return(
-    <>
-      <h1>Hello Mundo!</h1>
-      <MessageDisplay message= {count}/>
-      <PrimaryButton  label='Click me' onclick={() => setCount((count) => count + 1)}/>
-    </>
-  );
-};
+  const [currentPage, setCurrentPage] = useState('home');
 
-export default App
+  const handleExplore = () => {
+    setCurrentPage('listing');
+  };
+
+  const handleOrder = () => {
+    setCurrentPage('order');
+  };
+
+  const handleHome = () => {
+    setCurrentPage('home');
+  };
+
+  // Render the current page based on state
+  const renderPage = () => {
+    switch (currentPage) {
+      case 'listing':
+        return <CarListing />;
+      case 'order':
+        return <OrderPage />;
+      case 'home':
+      default:
+        return <LandingPage />;
+    }
+  };
+
+  return (
+    <div className="App">
+      <Navbar 
+        onExplore={handleExplore} 
+        onOrder={handleOrder} 
+        onHome={handleHome}
+        currentPage={currentPage}
+      />
+      {renderPage()}
+    </div>
+  );
+}
+
+export default App;
