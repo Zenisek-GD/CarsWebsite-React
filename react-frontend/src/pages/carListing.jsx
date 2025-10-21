@@ -221,7 +221,7 @@ const CarListing = ({ onOrder, onHome, onExplore }) => {
                 )}
 
                 {/* Car Grid */}
-               {!loading && currentCars.length > 0 ? (
+                {!loading && currentCars.length > 0 ? (
                     <>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
                             {currentCars.map(car => (
@@ -249,7 +249,7 @@ const CarListing = ({ onOrder, onHome, onExplore }) => {
                     </>
                 ) : (
                     // No results message
-                   !loading && (
+                    !loading && (
                         <div className="text-center py-16 bg-white rounded-2xl shadow-lg">
                             <div className="text-8xl mb-6">🚗</div>
                             <h3 className="text-3xl font-bold text-gray-900 mb-4">
