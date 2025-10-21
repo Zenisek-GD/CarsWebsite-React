@@ -14,6 +14,7 @@ const CarListing = ({ onOrder, onHome, onExplore }) => {
     const [loading, setLoading] = useState(false);
     const carsPerPage = 6;
 
+
     // Filter and sort cars
     useEffect(() => {
         setLoading(true);
@@ -72,13 +73,14 @@ const CarListing = ({ onOrder, onHome, onExplore }) => {
 
     const handleOrderClick = (car) => {
         console.log('Ordering car:', car);
-        // Navigate to order page with car data
-        // window.location.href = `/order?car=${car.id}&model=${encodeURIComponent(car.model)}`;
+        if (onOrder) {
+            onOrder(car); // Pass the car data to order page
+        }
     };
 
     const handleQuickView = (car) => {
         console.log('Quick view:', car);
-        // Implement quick view modal
+        // You could implement a modal here
     };
 
     const handleCompare = (car) => {
@@ -179,8 +181,8 @@ const CarListing = ({ onOrder, onHome, onExplore }) => {
                                 key={type}
                                 onClick={() => setSelectedFilter(type)}
                                 className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${selectedFilter === type
-                                        ? 'bg-blue-600 text-white shadow-lg'
-                                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                    ? 'bg-blue-600 text-white shadow-lg'
+                                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                                     }`}
                             >
                                 {type === 'all' ? 'All Types' : type}
@@ -219,20 +221,21 @@ const CarListing = ({ onOrder, onHome, onExplore }) => {
                 )}
 
                 {/* Car Grid */}
-                {!loading && currentCars.length > 0 ? (
+               {!loading && currentCars.length > 0 ? (
                     <>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
                             {currentCars.map(car => (
                                 <CarCard
                                     key={car.id}
                                     car={car}
-                                    onOrderClick={handleOrderClick}
+                                    onOrder={handleOrderClick} // Fixed prop name
                                     onQuickView={handleQuickView}
                                     onCompare={handleCompare}
+                                    onExplore={onExplore} // Pass explore function
+                                    onHome={onHome} // Pass home function
                                 />
                             ))}
                         </div>
-
                         {/* Pagination */}
                         {totalPages > 1 && (
                             <div className="bg-white rounded-2xl shadow-lg p-6">
@@ -246,20 +249,27 @@ const CarListing = ({ onOrder, onHome, onExplore }) => {
                     </>
                 ) : (
                     // No results message
-                    !loading && (
+                   !loading && (
                         <div className="text-center py-16 bg-white rounded-2xl shadow-lg">
                             <div className="text-8xl mb-6">🚗</div>
                             <h3 className="text-3xl font-bold text-gray-900 mb-4">
                                 No cars found
                             </h3>
                             <p className="text-gray-600 mb-6 max-w-md mx-auto">
-                                We couldn't find any vehicles matching your criteria. Try adjusting your search or filters.
+                                We couldn't find any vehicles matching your criteria.
                             </p>
-                            <PrimaryButton
-                                label="Browse All Vehicles"
-                                onClick={clearFilters}
-                                type="primary"
-                            />
+                            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                                <PrimaryButton
+                                    label="Clear Filters & Browse All"
+                                    onClick={clearFilters}
+                                    type="primary"
+                                />
+                                <PrimaryButton
+                                    label="Back to Home"
+                                    onClick={onHome}
+                                    type="outline"
+                                />
+                            </div>
                         </div>
                     )
                 )}

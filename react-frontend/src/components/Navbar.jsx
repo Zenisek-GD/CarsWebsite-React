@@ -6,28 +6,60 @@ const Navbar = ({ onExplore, onOrder, onHome, currentPage }) => {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     const navItems = [
-        { id: 'home', label: 'Home', onClick: onHome },
-        { id: 'features', label: 'Features', onClick: () => scrollToSection('features') },
+        { id: 'home', label: 'Home', onClick: () => handleHomeClick() },
         { id: 'models', label: 'Models', onClick: () => scrollToSection('models') },
+        { id: 'features', label: 'Features', onClick: () => scrollToSection('features') },
         { id: 'about', label: 'About', onClick: () => scrollToSection('about') }
     ];
+
+    // Function to scroll to top of page
+    const scrollToTop = () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    };
+
+    // Handle home click - go to home page AND scroll to top
+    const handleHomeClick = () => {
+        onHome();
+        // Scroll to top after a brief delay to ensure page is loaded
+        setTimeout(() => {
+            scrollToTop();
+        }, 100);
+    };
 
     // Function to scroll to sections on the landing page
     const scrollToSection = (sectionId) => {
         if (currentPage === 'home') {
             // If we're on the home page, scroll to the section
-            const element = document.getElementById(sectionId);
-            if (element) {
-                element.scrollIntoView({ behavior: 'smooth' });
-            }
-        } else {
-            // If we're on another page, go to home and then scroll
-            onHome();
-            // Use setTimeout to ensure the page has loaded before scrolling
             setTimeout(() => {
                 const element = document.getElementById(sectionId);
                 if (element) {
-                    element.scrollIntoView({ behavior: 'smooth' });
+                    const offset = 80; // Account for navbar height
+                    const elementPosition = element.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - offset;
+
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            }, 50);
+        } else {
+            // If we're on another page, go to home and then scroll
+            onHome();
+            setTimeout(() => {
+                const element = document.getElementById(sectionId);
+                if (element) {
+                    const offset = 80; // Account for navbar height
+                    const elementPosition = element.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - offset;
+
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
                 }
             }, 500);
         }
@@ -52,22 +84,26 @@ const Navbar = ({ onExplore, onOrder, onHome, currentPage }) => {
         return () => document.removeEventListener('keydown', handleEscape);
     }, []);
 
+    // Close mobile menu when route changes
+    useEffect(() => {
+        setIsMobileMenuOpen(false);
+    }, [currentPage]);
+
     const isActive = (page) => currentPage === page;
 
     return (
         <>
-            <nav className={`w-full flex justify-between items-center px-4 sm:px-6 md:px-8 lg:px-12 xl:px-24 py-3 transition-all duration-300 sticky top-0 z-50 ${
-                isScrolled 
-                    ? 'bg-white/95 backdrop-blur-lg shadow-lg border-b border-gray-200' 
-                    : 'bg-white/90 backdrop-blur-md shadow-sm border-b border-gray-100'
-            }`}>
+            <nav className={`w-full flex justify-between items-center px-4 sm:px-6 md:px-8 lg:px-12 xl:px-24 py-3 transition-all duration-300 sticky top-0 z-50 ${isScrolled
+                ? 'bg-white/95 backdrop-blur-lg shadow-lg border-b border-gray-200'
+                : 'bg-white/90 backdrop-blur-md shadow-sm border-b border-gray-100'
+                }`}>
                 {/* Logo Section */}
                 <div
                     className="flex items-center space-x-3 cursor-pointer group flex-shrink-0"
-                    onClick={onHome}
+                    onClick={handleHomeClick}
                     role="button"
                     tabIndex={0}
-                    onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && onHome()}
+                    onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && handleHomeClick()}
                 >
                     <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-indigo-700 rounded-full flex items-center justify-center text-white font-bold text-lg transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg shadow-md">
                         C
@@ -86,22 +122,20 @@ const Navbar = ({ onExplore, onOrder, onHome, currentPage }) => {
                         <button
                             key={item.id}
                             onClick={item.onClick}
-                            className={`px-5 py-2.5 rounded-xl transition-all duration-200 font-medium relative group ${
-                                isActive(item.id)
-                                    ? 'text-blue-600 font-semibold'
-                                    : 'text-gray-700 hover:text-blue-600'
-                            }`}
+                            className={`px-5 py-2.5 rounded-xl transition-all duration-200 font-medium relative group ${isActive(item.id)
+                                ? 'text-blue-600 font-semibold'
+                                : 'text-gray-700 hover:text-blue-600'
+                                }`}
                         >
                             {/* Active indicator */}
                             {isActive(item.id) && (
                                 <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-1/2 h-0.5 bg-blue-600 rounded-full"></div>
                             )}
                             {/* Hover effect */}
-                            <div className={`absolute inset-0 rounded-xl transition-all duration-200 ${
-                                isActive(item.id) 
-                                    ? 'bg-blue-50 border border-blue-100' 
-                                    : 'group-hover:bg-gray-50'
-                            }`}></div>
+                            <div className={`absolute inset-0 rounded-xl transition-all duration-200 ${isActive(item.id)
+                                ? 'bg-blue-50 border border-blue-100'
+                                : 'group-hover:bg-gray-50'
+                                }`}></div>
                             <span className="relative z-10">{item.label}</span>
                         </button>
                     ))}
@@ -123,31 +157,27 @@ const Navbar = ({ onExplore, onOrder, onHome, currentPage }) => {
                         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                         aria-label="Toggle menu"
                     >
-                        <span className={`w-6 h-0.5 bg-gray-700 transition-all duration-300 ${
-                            isMobileMenuOpen ? 'rotate-45 translate-y-2' : ''
-                        }`}></span>
-                        <span className={`w-6 h-0.5 bg-gray-700 transition-all duration-300 ${
-                            isMobileMenuOpen ? 'opacity-0' : 'opacity-100'
-                        }`}></span>
-                        <span className={`w-6 h-0.5 bg-gray-700 transition-all duration-300 ${
-                            isMobileMenuOpen ? '-rotate-45 -translate-y-2' : ''
-                        }`}></span>
+                        <span className={`w-6 h-0.5 bg-gray-700 transition-all duration-300 ${isMobileMenuOpen ? 'rotate-45 translate-y-2' : ''
+                            }`}></span>
+                        <span className={`w-6 h-0.5 bg-gray-700 transition-all duration-300 ${isMobileMenuOpen ? 'opacity-0' : 'opacity-100'
+                            }`}></span>
+                        <span className={`w-6 h-0.5 bg-gray-700 transition-all duration-300 ${isMobileMenuOpen ? '-rotate-45 -translate-y-2' : ''
+                            }`}></span>
                     </button>
                 </div>
             </nav>
 
             {/* Mobile Menu Overlay */}
             {isMobileMenuOpen && (
-                <div 
+                <div
                     className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 md:hidden"
                     onClick={() => setIsMobileMenuOpen(false)}
                 ></div>
             )}
 
             {/* Mobile Menu */}
-            <div className={`fixed top-0 right-0 h-full w-80 max-w-full bg-white shadow-2xl transform transition-transform duration-300 ease-in-out z-50 md:hidden ${
-                isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
-            }`}>
+            <div className={`fixed top-0 right-0 h-full w-80 max-w-full bg-white shadow-2xl transform transition-transform duration-300 ease-in-out z-50 md:hidden ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
+                }`}>
                 {/* Mobile Header */}
                 <div className="flex items-center justify-between p-6 border-b border-gray-200">
                     <div className="flex items-center space-x-3">
@@ -173,11 +203,10 @@ const Navbar = ({ onExplore, onOrder, onHome, currentPage }) => {
                         <button
                             key={item.id}
                             onClick={item.onClick}
-                            className={`w-full text-left px-4 py-3 rounded-xl transition-all duration-200 font-medium flex items-center justify-between ${
-                                isActive(item.id)
-                                    ? 'bg-blue-50 text-blue-600 border border-blue-100'
-                                    : 'text-gray-700 hover:bg-gray-50 hover:text-blue-600'
-                            }`}
+                            className={`w-full text-left px-4 py-3 rounded-xl transition-all duration-200 font-medium flex items-center justify-between ${isActive(item.id)
+                                ? 'bg-blue-50 text-blue-600 border border-blue-100'
+                                : 'text-gray-700 hover:bg-gray-50 hover:text-blue-600'
+                                }`}
                         >
                             <span>{item.label}</span>
                             {isActive(item.id) && (
