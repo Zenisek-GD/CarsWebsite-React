@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { carData } from '../data/cardata.js';
+import { carData } from '../data/carData.js';
 import SearchBar from '../components/Searchbar';
 import CarCard from '../components/CarCard';
 import Pagination from '../components/Pagination';
