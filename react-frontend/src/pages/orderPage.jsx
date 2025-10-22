@@ -42,10 +42,13 @@ const OrderPage = ({ car, onHome, onExplore }) => {
 
     const nextStep = () => {
         setCurrentStep(prev => Math.min(prev + 1, 4));
+        // Scroll to top on step change
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     const prevStep = () => {
         setCurrentStep(prev => Math.max(prev - 1, 1));
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     const handleSubmit = async (e) => {
@@ -58,8 +61,6 @@ const OrderPage = ({ car, onHome, onExplore }) => {
         console.log('Order submitted:', formData);
         setIsSubmitting(false);
         setSubmitSuccess(true);
-        
-        // Here you would typically send the data to your backend
     };
 
     const carModels = [
@@ -86,22 +87,22 @@ const OrderPage = ({ car, onHome, onExplore }) => {
 
     if (submitSuccess) {
         return (
-            <div className="min-h-screen bg-gradient-to-br from-green-50 to-green-100 flex items-center justify-center py-8">
-                <div className="max-w-2xl mx-auto px-4 text-center">
-                    <div className="bg-white rounded-2xl shadow-lg p-12">
-                        <div className="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-6">
-                            <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="min-h-screen bg-gradient-to-br from-green-50 to-green-100 flex items-center justify-center py-8 px-4 sm:px-6 lg:px-8">
+                <div className="max-w-2xl w-full mx-auto">
+                    <div className="bg-white rounded-2xl shadow-lg p-6 sm:p-8 md:p-12">
+                        <div className="w-16 h-16 sm:w-20 sm:h-20 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
+                            <svg className="w-8 h-8 sm:w-10 sm:h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
                             </svg>
                         </div>
-                        <h2 className="text-3xl font-bold text-gray-900 mb-4">Order Confirmed!</h2>
-                        <p className="text-lg text-gray-600 mb-2">
+                        <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3 sm:mb-4 text-center">Order Confirmed!</h2>
+                        <p className="text-base sm:text-lg text-gray-600 mb-2 text-center">
                             Thank you for your order, <strong>{formData.fullName}</strong>!
                         </p>
-                        <p className="text-gray-600 mb-6">
+                        <p className="text-gray-600 mb-6 text-center">
                             We've received your request for the <strong>{formData.carModel}</strong> and our sales team will contact you within 24 hours.
                         </p>
-                        <div className="space-y-4">
+                        <div className="space-y-3 sm:space-y-4">
                             <PrimaryButton
                                 label="Back to Home"
                                 onClick={onHome}
@@ -122,23 +123,47 @@ const OrderPage = ({ car, onHome, onExplore }) => {
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-8">
-            <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-4 sm:py-8 px-4 sm:px-6 lg:px-8">
+            <div className="max-w-4xl mx-auto">
                 {/* Header */}
-                <div className="text-center mb-12">
-                    <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+                <div className="text-center mb-8 sm:mb-12">
+                    <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-3 sm:mb-4">
                         {car ? `Order ${car.model}` : 'Place Your Order'}
                     </h1>
-                    <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+                    <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto">
                         Complete your purchase in just a few simple steps. Our team is ready to assist you.
                     </p>
                 </div>
 
-                {/* Progress Bar */}
-                <div className="bg-white rounded-2xl shadow-lg p-6 mb-8">
+                {/* Progress Bar - Mobile */}
+                <div className="bg-white rounded-2xl shadow-lg p-4 sm:p-6 mb-6 sm:mb-8 md:hidden">
+                    <div className="flex items-center justify-between mb-3">
+                        {[1, 2, 3, 4].map(step => (
+                            <div key={step} className="flex flex-col items-center">
+                                <div className={`w-8 h-8 rounded-full flex items-center justify-center border-2 ${
+                                    step === currentStep 
+                                        ? 'bg-blue-600 border-blue-600 text-white' 
+                                        : step < currentStep 
+                                        ? 'bg-green-500 border-green-500 text-white'
+                                        : 'bg-white border-gray-300 text-gray-500'
+                                }`}>
+                                    {step < currentStep ? '✓' : step}
+                                </div>
+                                <span className={`text-xs mt-1 ${
+                                    step === currentStep ? 'text-blue-600 font-semibold' : 'text-gray-500'
+                                }`}>
+                                    Step {step}
+                                </span>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                {/* Progress Bar - Desktop */}
+                <div className="bg-white rounded-2xl shadow-lg p-6 mb-8 hidden md:block">
                     <div className="flex items-center justify-between mb-4">
                         {[1, 2, 3, 4].map(step => (
-                            <div key={step} className="flex items-center">
+                            <div key={step} className="flex items-center flex-1">
                                 <div className={`w-10 h-10 rounded-full flex items-center justify-center border-2 ${
                                     step === currentStep 
                                         ? 'bg-blue-600 border-blue-600 text-white' 
@@ -149,7 +174,7 @@ const OrderPage = ({ car, onHome, onExplore }) => {
                                     {step < currentStep ? '✓' : step}
                                 </div>
                                 {step < 4 && (
-                                    <div className={`w-24 h-1 mx-2 ${
+                                    <div className={`flex-1 h-1 mx-2 ${
                                         step < currentStep ? 'bg-green-500' : 'bg-gray-300'
                                     }`}></div>
                                 )}
@@ -159,21 +184,21 @@ const OrderPage = ({ car, onHome, onExplore }) => {
                     <div className="flex justify-between text-sm text-gray-600">
                         <span className={currentStep >= 1 ? 'text-blue-600 font-semibold' : ''}>Personal Info</span>
                         <span className={currentStep >= 2 ? 'text-blue-600 font-semibold' : ''}>Vehicle Details</span>
-                        <span className={currentStep >= 3 ? 'text-blue-600 font-semibold' : ''}>Additional Services</span>
-                        <span className={currentStep >= 4 ? 'text-blue-600 font-semibold' : ''}>Review & Submit</span>
+                        <span className={currentStep >= 3 ? 'text-blue-600 font-semibold' : ''}>Services</span>
+                        <span className={currentStep >= 4 ? 'text-blue-600 font-semibold' : ''}>Review</span>
                     </div>
                 </div>
 
                 {/* Order Form */}
-                <div className="bg-white rounded-2xl shadow-lg p-8">
+                <div className="bg-white rounded-2xl shadow-lg p-4 sm:p-6 md:p-8">
                     <form onSubmit={handleSubmit}>
                         {/* Step 1: Personal Information */}
                         {currentStep === 1 && (
-                            <div className="space-y-6">
-                                <h3 className="text-2xl font-bold text-gray-900 mb-6">Personal Information</h3>
+                            <div className="space-y-4 sm:space-y-6">
+                                <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">Personal Information</h3>
                                 
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <div>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                                    <div className="sm:col-span-2">
                                         <label className="block text-sm font-medium text-gray-700 mb-2">
                                             Full Name *
                                         </label>
@@ -183,7 +208,7 @@ const OrderPage = ({ car, onHome, onExplore }) => {
                                             value={formData.fullName}
                                             onChange={handleChange}
                                             required
-                                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                                            className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                                             placeholder="John Doe"
                                         />
                                     </div>
@@ -198,7 +223,7 @@ const OrderPage = ({ car, onHome, onExplore }) => {
                                             value={formData.email}
                                             onChange={handleChange}
                                             required
-                                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                                            className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                                             placeholder="john@example.com"
                                         />
                                     </div>
@@ -213,12 +238,12 @@ const OrderPage = ({ car, onHome, onExplore }) => {
                                             value={formData.phone}
                                             onChange={handleChange}
                                             required
-                                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                                            className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                                             placeholder="(555) 123-4567"
                                         />
                                     </div>
 
-                                    <div>
+                                    <div className="sm:col-span-2">
                                         <label className="block text-sm font-medium text-gray-700 mb-2">
                                             Preferred Contact Method
                                         </label>
@@ -226,17 +251,15 @@ const OrderPage = ({ car, onHome, onExplore }) => {
                                             name="contactMethod"
                                             value={formData.contactMethod}
                                             onChange={handleChange}
-                                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                            className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                         >
                                             <option value="email">Email</option>
                                             <option value="phone">Phone</option>
                                             <option value="text">Text Message</option>
                                         </select>
                                     </div>
-                                </div>
 
-                                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                    <div className="md:col-span-2">
+                                    <div className="sm:col-span-2">
                                         <label className="block text-sm font-medium text-gray-700 mb-2">
                                             Street Address
                                         </label>
@@ -245,7 +268,7 @@ const OrderPage = ({ car, onHome, onExplore }) => {
                                             name="address"
                                             value={formData.address}
                                             onChange={handleChange}
-                                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                                            className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                                             placeholder="123 Main St"
                                         />
                                     </div>
@@ -259,13 +282,11 @@ const OrderPage = ({ car, onHome, onExplore }) => {
                                             name="city"
                                             value={formData.city}
                                             onChange={handleChange}
-                                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                                            className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                                             placeholder="New York"
                                         />
                                     </div>
-                                </div>
 
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div>
                                         <label className="block text-sm font-medium text-gray-700 mb-2">
                                             State
@@ -274,7 +295,7 @@ const OrderPage = ({ car, onHome, onExplore }) => {
                                             name="state"
                                             value={formData.state}
                                             onChange={handleChange}
-                                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                            className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                         >
                                             <option value="">Select State</option>
                                             {states.map(state => (
@@ -292,18 +313,18 @@ const OrderPage = ({ car, onHome, onExplore }) => {
                                             name="zipCode"
                                             value={formData.zipCode}
                                             onChange={handleChange}
-                                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                                            className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                                             placeholder="10001"
                                         />
                                     </div>
                                 </div>
 
-                                <div className="flex justify-end">
+                                <div className="flex justify-end pt-4">
                                     <PrimaryButton
                                         type="button"
                                         label="Next: Vehicle Details"
                                         onClick={nextStep}
-                                        className="px-8"
+                                        className="px-6 sm:px-8 py-2 sm:py-3"
                                     />
                                 </div>
                             </div>
@@ -311,8 +332,8 @@ const OrderPage = ({ car, onHome, onExplore }) => {
 
                         {/* Step 2: Vehicle Details */}
                         {currentStep === 2 && (
-                            <div className="space-y-6">
-                                <h3 className="text-2xl font-bold text-gray-900 mb-6">Vehicle Details</h3>
+                            <div className="space-y-4 sm:space-y-6">
+                                <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">Vehicle Details</h3>
                                 
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -323,7 +344,7 @@ const OrderPage = ({ car, onHome, onExplore }) => {
                                         value={formData.carModel}
                                         onChange={handleChange}
                                         required
-                                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                        className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                     >
                                         <option value="">Choose a vehicle model</option>
                                         {carModels.map(model => (
@@ -333,14 +354,14 @@ const OrderPage = ({ car, onHome, onExplore }) => {
                                 </div>
 
                                 {car && (
-                                    <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
+                                    <div className="bg-blue-50 border border-blue-200 rounded-lg sm:rounded-xl p-3 sm:p-4">
                                         <h4 className="font-semibold text-blue-900 mb-2">Selected Vehicle</h4>
                                         <p className="text-blue-800">{car.model} - {car.price}</p>
                                         <p className="text-blue-700 text-sm mt-1">{car.description}</p>
                                     </div>
                                 )}
 
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                                     <div>
                                         <label className="block text-sm font-medium text-gray-700 mb-2">
                                             Financing Interest
@@ -349,7 +370,7 @@ const OrderPage = ({ car, onHome, onExplore }) => {
                                             name="financing"
                                             value={formData.financing}
                                             onChange={handleChange}
-                                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                            className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                         >
                                             <option value="not-sure">Not Sure Yet</option>
                                             <option value="cash">Paying Cash</option>
@@ -366,7 +387,7 @@ const OrderPage = ({ car, onHome, onExplore }) => {
                                             name="tradeIn"
                                             value={formData.tradeIn}
                                             onChange={handleChange}
-                                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                            className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                         >
                                             <option value="no">No Trade-In</option>
                                             <option value="yes">Yes, I have a trade-in</option>
@@ -374,16 +395,18 @@ const OrderPage = ({ car, onHome, onExplore }) => {
                                     </div>
                                 </div>
 
-                                <div className="flex justify-between">
+                                <div className="flex justify-between pt-4">
                                     <PrimaryButton
-                                        type="primary"
+                                        type="button"
                                         label="Back"
                                         onClick={prevStep}
+                                        className="px-6 sm:px-8 py-2 sm:py-3"
                                     />
                                     <PrimaryButton
                                         type="button"
                                         label="Next: Additional Services"
                                         onClick={nextStep}
+                                        className="px-6 sm:px-8 py-2 sm:py-3"
                                     />
                                 </div>
                             </div>
@@ -391,11 +414,11 @@ const OrderPage = ({ car, onHome, onExplore }) => {
 
                         {/* Step 3: Additional Services */}
                         {currentStep === 3 && (
-                            <div className="space-y-6">
-                                <h3 className="text-2xl font-bold text-gray-900 mb-6">Additional Services</h3>
+                            <div className="space-y-4 sm:space-y-6">
+                                <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">Additional Services</h3>
                                 
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <div>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                                    <div className="sm:col-span-2">
                                         <label className="block text-sm font-medium text-gray-700 mb-2">
                                             Schedule Test Drive
                                         </label>
@@ -403,7 +426,7 @@ const OrderPage = ({ car, onHome, onExplore }) => {
                                             name="testDrive"
                                             value={formData.testDrive}
                                             onChange={handleChange}
-                                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                            className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                         >
                                             <option value="no">No, thanks</option>
                                             <option value="yes">Yes, please schedule a test drive</option>
@@ -411,7 +434,7 @@ const OrderPage = ({ car, onHome, onExplore }) => {
                                     </div>
 
                                     {formData.testDrive === 'yes' && (
-                                        <div>
+                                        <div className="sm:col-span-2">
                                             <label className="block text-sm font-medium text-gray-700 mb-2">
                                                 Preferred Date
                                             </label>
@@ -421,7 +444,7 @@ const OrderPage = ({ car, onHome, onExplore }) => {
                                                 value={formData.preferredDate}
                                                 onChange={handleChange}
                                                 min={new Date().toISOString().split('T')[0]}
-                                                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                                className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                             />
                                         </div>
                                     )}
@@ -436,22 +459,23 @@ const OrderPage = ({ car, onHome, onExplore }) => {
                                         value={formData.message}
                                         onChange={handleChange}
                                         rows="4"
-                                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                                        className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                                         placeholder="Any special requests, questions, or additional information you'd like to share..."
                                     />
                                 </div>
 
-                                <div className="flex justify-between">
+                                <div className="flex justify-between pt-4">
                                     <PrimaryButton
                                         type="button"
                                         label="Back"
                                         onClick={prevStep}
-                                       
+                                        className="px-6 sm:px-8 py-2 sm:py-3"
                                     />
                                     <PrimaryButton
                                         type="button"
                                         label="Next: Review & Submit"
                                         onClick={nextStep}
+                                        className="px-6 sm:px-8 py-2 sm:py-3"
                                     />
                                 </div>
                             </div>
@@ -459,52 +483,58 @@ const OrderPage = ({ car, onHome, onExplore }) => {
 
                         {/* Step 4: Review & Submit */}
                         {currentStep === 4 && (
-                            <div className="space-y-6">
-                                <h3 className="text-2xl font-bold text-gray-900 mb-6">Review Your Order</h3>
+                            <div className="space-y-4 sm:space-y-6">
+                                <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">Review Your Order</h3>
                                 
-                                <div className="bg-gray-50 rounded-xl p-6 space-y-4">
-                                    <div className="grid grid-cols-2 gap-4">
+                                <div className="bg-gray-50 rounded-lg sm:rounded-xl p-4 sm:p-6 space-y-4 sm:space-y-6">
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                                         <div>
-                                            <h4 className="font-semibold text-gray-700">Personal Information</h4>
-                                            <p className="text-gray-600">{formData.fullName}</p>
-                                            <p className="text-gray-600">{formData.email}</p>
-                                            <p className="text-gray-600">{formData.phone}</p>
+                                            <h4 className="font-semibold text-gray-700 mb-2">Personal Information</h4>
+                                            <div className="space-y-1 text-sm sm:text-base">
+                                                <p className="text-gray-600">{formData.fullName}</p>
+                                                <p className="text-gray-600">{formData.email}</p>
+                                                <p className="text-gray-600">{formData.phone}</p>
+                                                <p className="text-gray-600">{formData.address}</p>
+                                                <p className="text-gray-600">{formData.city}, {formData.state} {formData.zipCode}</p>
+                                            </div>
                                         </div>
                                         <div>
-                                            <h4 className="font-semibold text-gray-700">Vehicle</h4>
-                                            <p className="text-gray-600">{formData.carModel}</p>
-                                            <p className="text-gray-600">Financing: {formData.financing}</p>
-                                            <p className="text-gray-600">Trade-in: {formData.tradeIn}</p>
+                                            <h4 className="font-semibold text-gray-700 mb-2">Vehicle Details</h4>
+                                            <div className="space-y-1 text-sm sm:text-base">
+                                                <p className="text-gray-600">{formData.carModel}</p>
+                                                <p className="text-gray-600">Financing: {formData.financing.replace('-', ' ')}</p>
+                                                <p className="text-gray-600">Trade-in: {formData.tradeIn}</p>
+                                            </div>
                                         </div>
                                     </div>
                                     
                                     {formData.testDrive === 'yes' && (
                                         <div>
-                                            <h4 className="font-semibold text-gray-700">Test Drive</h4>
+                                            <h4 className="font-semibold text-gray-700 mb-2">Test Drive</h4>
                                             <p className="text-gray-600">Scheduled: {formData.preferredDate || 'Date to be determined'}</p>
                                         </div>
                                     )}
                                     
                                     {formData.message && (
                                         <div>
-                                            <h4 className="font-semibold text-gray-700">Additional Notes</h4>
+                                            <h4 className="font-semibold text-gray-700 mb-2">Additional Notes</h4>
                                             <p className="text-gray-600">{formData.message}</p>
                                         </div>
                                     )}
                                 </div>
 
-                                <div className="flex justify-between">
+                                <div className="flex justify-between pt-4">
                                     <PrimaryButton
                                         type="button"
                                         label="Back"
                                         onClick={prevStep}
-                                        
+                                        className="px-6 sm:px-8 py-2 sm:py-3"
                                     />
                                     <PrimaryButton
                                         type="submit"
                                         label={isSubmitting ? "Processing..." : "Submit Order"}
                                         disabled={isSubmitting}
-                                        className="px-12"
+                                        className="px-8 sm:px-12 py-2 sm:py-3"
                                     />
                                 </div>
                             </div>
@@ -513,9 +543,9 @@ const OrderPage = ({ car, onHome, onExplore }) => {
                 </div>
 
                 {/* Support Info */}
-                <div className="text-center mt-8 text-gray-600">
-                    <p>Need immediate assistance? Call us at <strong>(555) 123-4567</strong></p>
-                    <p className="text-sm mt-2">Our sales team is available Monday-Saturday, 9AM-8PM</p>
+                <div className="text-center mt-6 sm:mt-8 text-gray-600">
+                    <p className="text-sm sm:text-base">Need immediate assistance? Call us at <strong>(555) 123-4567</strong></p>
+                    <p className="text-xs sm:text-sm mt-1 sm:mt-2">Our sales team is available Monday-Saturday, 9AM-8PM</p>
                 </div>
             </div>
         </div>

@@ -271,189 +271,189 @@ const LandingPage = ({ onExplore, onOrder }) => {
     };
 
     return (
-        <div className="bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen w-full">
-            {/* Enhanced Hero Section */}
-            <section id="home" className="w-full relative overflow-hidden bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900">
-                {/* Animated Background Elements */}
-                <div className="absolute inset-0">
-                    {/* Gradient Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-transparent z-10"></div>
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10"></div>
+     <div className="bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen w-full">
+    {/* Enhanced Hero Section */}
+    <section id="home" className="w-full relative overflow-hidden bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 pt-24 md:pt-0">
+        {/* Animated Background Elements */}
+        <div className="absolute inset-0">
+            {/* Gradient Overlay */}
+            <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-transparent z-10"></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10"></div>
 
-                    {/* Animated Background Pattern */}
-                    <div className="absolute inset-0 opacity-10">
-                        <div className="absolute top-20 left-20 w-72 h-72 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl animate-pulse"></div>
-                        <div className="absolute top-40 right-32 w-96 h-96 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl animate-pulse" style={{ animationDelay: '2s' }}></div>
-                        <div className="absolute bottom-32 left-1/3 w-80 h-80 bg-indigo-500 rounded-full mix-blend-multiply filter blur-xl animate-pulse" style={{ animationDelay: '4s' }}></div>
-                    </div>
+            {/* Animated Background Pattern */}
+            <div className="absolute inset-0 opacity-10">
+                <div className="absolute top-20 left-20 w-72 h-72 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl animate-pulse"></div>
+                <div className="absolute top-40 right-32 w-96 h-96 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl animate-pulse" style={{ animationDelay: '2s' }}></div>
+                <div className="absolute bottom-32 left-1/3 w-80 h-80 bg-indigo-500 rounded-full mix-blend-multiply filter blur-xl animate-pulse" style={{ animationDelay: '4s' }}></div>
+            </div>
+        </div>
+
+        {/* Slides */}
+        <div className="relative h-screen flex items-center pt-12 md:pt-0 pb-20 md:pb-0">
+            {carSlides.map((slide, index) => (
+                <div
+                    key={index}
+                    className={`absolute inset-0 transition-all duration-1000 ease-in-out transform ${index === currentSlide
+                        ? 'opacity-100 translate-x-0'
+                        : 'opacity-0 translate-x-10'
+                        }`}
+                >
+                    <img
+                        src={slide.image}
+                        alt={slide.title}
+                        className="w-full h-full object-cover"
+                    />
                 </div>
+            ))}
 
-                {/* Slides */}
-                <div className="relative h-screen flex items-center">
-                    {carSlides.map((slide, index) => (
-                        <div
-                            key={index}
-                            className={`absolute inset-0 transition-all duration-1000 ease-in-out transform ${index === currentSlide
-                                ? 'opacity-100 translate-x-0'
-                                : 'opacity-0 translate-x-10'
-                                }`}
-                        >
-                            <img
-                                src={slide.image}
-                                alt={slide.title}
-                                className="w-full h-full object-cover"
+            {/* Hero Content */}
+            <div className="relative z-20 max-w-7xl mx-auto px-6 lg:px-8 w-full mt-12 md:mt-0">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-center">
+                    {/* Text Content */}
+                    <div className={`space-y-6 md:space-y-8 transform transition-all duration-1000 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
+                        }`}>
+                        {/* Badge */}
+                        <div className="inline-flex items-center px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20">
+                            <span className="text-white text-sm font-semibold">
+                                {carSlides[currentSlide].badge}
+                            </span>
+                        </div>
+
+                        {/* Title & Subtitle */}
+                        <div className="space-y-3 md:space-y-4">
+                            <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold text-white leading-tight">
+                                {carSlides[currentSlide].title.split(' ').map((word, i) => (
+                                    <span
+                                        key={i}
+                                        className="block bg-gradient-to-r from-white to-gray-200 bg-clip-text text-transparent"
+                                    >
+                                        {word}
+                                    </span>
+                                ))}
+                            </h1>
+                            <p className="text-xl sm:text-2xl lg:text-3xl text-blue-200 font-light">
+                                {carSlides[currentSlide].subtitle}
+                            </p>
+                        </div>
+
+                        {/* Description */}
+                        <p className="text-lg sm:text-xl text-gray-200 leading-relaxed max-w-2xl">
+                            {carSlides[currentSlide].description}
+                        </p>
+
+                        {/* Price */}
+                        <div className="flex items-center space-x-4">
+                            <div className="text-xl sm:text-2xl font-bold text-green-400">
+                                {carSlides[currentSlide].price}
+                            </div>
+                            <div className="w-px h-6 sm:h-8 bg-gray-400"></div>
+                            <div className="text-sm text-gray-300">
+                                Competitive Financing Available
+                            </div>
+                        </div>
+
+                        {/* Features */}
+                        <div className="flex flex-wrap gap-2 sm:gap-3">
+                            {carSlides[currentSlide].features.map((feature, index) => (
+                                <div
+                                    key={index}
+                                    className="flex items-center space-x-2 px-3 py-1 sm:px-4 sm:py-2 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20"
+                                >
+                                    <span className="text-green-400 text-sm sm:text-lg">✓</span>
+                                    <span className="text-white text-xs sm:text-sm">{feature}</span>
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* CTA Buttons */}
+                        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-2 sm:pt-4">
+                            <PrimaryButton
+                                label={carSlides[currentSlide].buttonText}
+                                onClick={handleExploreClick}
+                                type="primary"
+                                className="px-6 py-3 sm:px-8 sm:py-4 text-base sm:text-lg font-semibold shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300"
+                            />
+                            <PrimaryButton
+                                label="Schedule Test Drive"
+                                onClick={handleTestDrive}
+                                type="outline"
+                                className="px-6 py-3 sm:px-8 sm:py-4 text-base sm:text-lg font-semibold border-white text-white hover:bg-white hover:text-gray-900"
                             />
                         </div>
-                    ))}
 
-                    {/* Hero Content */}
-                    <div className="relative z-20 max-w-7xl mx-auto px-6 lg:px-8 w-full">
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                            {/* Text Content */}
-                            <div className={`space-y-8 transform transition-all duration-1000 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
-                                }`}>
-                                {/* Badge */}
-                                <div className="inline-flex items-center px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20">
-                                    <span className="text-white text-sm font-semibold">
-                                        {carSlides[currentSlide].badge}
-                                    </span>
-                                </div>
-
-                                {/* Title & Subtitle */}
-                                <div className="space-y-4">
-                                    <h1 className="text-5xl lg:text-7xl font-bold text-white leading-tight">
-                                        {carSlides[currentSlide].title.split(' ').map((word, i) => (
-                                            <span
-                                                key={i}
-                                                className="block bg-gradient-to-r from-white to-gray-200 bg-clip-text text-transparent"
-                                            >
-                                                {word}
-                                            </span>
-                                        ))}
-                                    </h1>
-                                    <p className="text-2xl lg:text-3xl text-blue-200 font-light">
-                                        {carSlides[currentSlide].subtitle}
-                                    </p>
-                                </div>
-
-                                {/* Description */}
-                                <p className="text-xl text-gray-200 leading-relaxed max-w-2xl">
-                                    {carSlides[currentSlide].description}
-                                </p>
-
-                                {/* Price */}
-                                <div className="flex items-center space-x-4">
-                                    <div className="text-2xl font-bold text-green-400">
-                                        {carSlides[currentSlide].price}
+                        {/* Quick Stats - Hidden on mobile to save space */}
+                        <div className="hidden sm:grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 pt-6 sm:pt-8 border-t border-white/20">
+                            {heroStats.map((stat, index) => (
+                                <div key={index} className="text-center">
+                                    <div className="text-xl sm:text-2xl font-bold text-white mb-1">
+                                        {stat.number}
                                     </div>
-                                    <div className="w-px h-8 bg-gray-400"></div>
-                                    <div className="text-sm text-gray-300">
-                                        Competitive Financing Available
+                                    <div className="text-xs text-gray-300 uppercase tracking-wide">
+                                        {stat.label}
                                     </div>
                                 </div>
-
-                                {/* Features */}
-                                <div className="flex flex-wrap gap-3">
-                                    {carSlides[currentSlide].features.map((feature, index) => (
-                                        <div
-                                            key={index}
-                                            className="flex items-center space-x-2 px-4 py-2 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20"
-                                        >
-                                            <span className="text-green-400 text-lg">✓</span>
-                                            <span className="text-white text-sm">{feature}</span>
-                                        </div>
-                                    ))}
-                                </div>
-
-                                {/* CTA Buttons */}
-                                <div className="flex flex-col sm:flex-row gap-4 pt-4">
-                                    <PrimaryButton
-                                        label={carSlides[currentSlide].buttonText}
-                                        onClick={handleExploreClick}
-                                        type="primary"
-                                        className="px-8 py-4 text-lg font-semibold shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300"
-                                    />
-                                    <PrimaryButton
-                                        label="Schedule Test Drive"
-                                        onClick={handleTestDrive}
-                                        type="outline"
-                                        className="px-8 py-4 text-lg font-semibold border-white text-white hover:bg-white hover:text-gray-900"
-                                    />
-                                </div>
-
-                                {/* Quick Stats */}
-                                <div className="grid grid-cols-4 gap-4 pt-8 border-t border-white/20">
-                                    {heroStats.map((stat, index) => (
-                                        <div key={index} className="text-center">
-                                            <div className="text-2xl font-bold text-white mb-1">
-                                                {stat.number}
-                                            </div>
-                                            <div className="text-xs text-gray-300 uppercase tracking-wide">
-                                                {stat.label}
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-
-                            {/* Visual Elements - Car Display */}
-                            <div className={`relative transform transition-all duration-1000 delay-300 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
-                                }`}>
-                                {/* Main Car Image */}
-                                <div className="relative">
-                                    <img
-                                        src={carSlides[currentSlide].image}
-                                        alt={carSlides[currentSlide].title}
-                                        className="w-full max-w-2xl rounded-2xl shadow-2xl transform hover:scale-105 transition-transform duration-500"
-                                    />
-
-                                    {/* Floating Elements */}
-                                    <div className="absolute -top-4 -right-4 bg-gradient-to-r from-red-500 to-orange-500 text-white px-4 py-2 rounded-full shadow-lg animate-pulse">
-                                        🔥 Popular Choice
-                                    </div>
-
-                                    <div className="absolute -bottom-4 -left-4 bg-white/90 backdrop-blur-sm rounded-2xl p-4 shadow-lg">
-                                        <div className="text-sm text-gray-600">Monthly Payment</div>
-                                        <div className="text-xl font-bold text-gray-900">From $399/mo</div>
-                                    </div>
-                                </div>
-
-                                {/* Background Decorative Elements */}
-                                <div className="absolute -z-10 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Slide Navigation */}
-                    <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20">
-                        <div className="flex space-x-3">
-                            {carSlides.map((_, index) => (
-                                <button
-                                    key={index}
-                                    className={`w-3 h-3 rounded-full transition-all duration-500 ${index === currentSlide
-                                        ? 'bg-white scale-125 shadow-lg'
-                                        : 'bg-white/50 hover:bg-white/80'
-                                        }`}
-                                    onClick={() => setCurrentSlide(index)}
-                                />
                             ))}
                         </div>
                     </div>
 
-                    {/* Scroll Indicator */}
-                    <div className="absolute bottom-8 right-8 z-20">
-                        <div className="flex flex-col items-center space-y-2 text-white/70">
-                            <span className="text-sm rotate-90 whitespace-nowrap mb-12">Scroll to explore</span>
-                            <div className="w-px h-16 bg-white/30">
-                                <div className="w-px h-8 bg-white animate-bounce"></div>
+                    {/* Visual Elements - Car Display */}
+                    <div className={`relative transform transition-all duration-1000 delay-300 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
+                        }`}>
+                        {/* Main Car Image */}
+                        <div className="relative">
+                            <img
+                                src={carSlides[currentSlide].image}
+                                alt={carSlides[currentSlide].title}
+                                className="w-full max-w-2xl rounded-2xl shadow-2xl transform hover:scale-105 transition-transform duration-500"
+                            />
+
+                            {/* Floating Elements */}
+                            <div className="absolute -top-3 -right-3 sm:-top-4 sm:-right-4 bg-gradient-to-r from-red-500 to-orange-500 text-white px-3 py-1 sm:px-4 sm:py-2 rounded-full shadow-lg animate-pulse text-xs sm:text-sm">
+                                🔥 Popular Choice
+                            </div>
+
+                            <div className="absolute -bottom-3 -left-3 sm:-bottom-4 sm:-left-4 bg-white/90 backdrop-blur-sm rounded-xl sm:rounded-2xl p-3 sm:p-4 shadow-lg">
+                                <div className="text-xs sm:text-sm text-gray-600">Monthly Payment</div>
+                                <div className="text-lg sm:text-xl font-bold text-gray-900">From $399/mo</div>
                             </div>
                         </div>
+
+                        {/* Background Decorative Elements */}
+                        <div className="absolute -z-10 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 sm:w-96 sm:h-96 bg-blue-500/20 rounded-full blur-3xl"></div>
                     </div>
                 </div>
+            </div>
 
-                {/* Next Section Indicator */}
-                <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-gray-50 to-transparent"></div>
-            </section>
+            {/* Slide Navigation */}
+            <div className="absolute bottom-30 sm:bottom-8 left-1/2 transform -translate-x-1/2 z-20">
+                <div className="flex space-x-3">
+                    {carSlides.map((_, index) => (
+                        <button
+                            key={index}
+                            className={`w-3 h-3 rounded-full transition-all duration-500 ${index === currentSlide
+                                ? 'bg-white scale-125 shadow-lg'
+                                : 'bg-white/50 hover:bg-white/80'
+                                }`}
+                            onClick={() => setCurrentSlide(index)}
+                        />
+                    ))}
+                </div>
+            </div>
+
+            {/* Scroll Indicator */}
+            <div className="absolute bottom-30 sm:bottom-1 right-4 sm:right-8 z-20">
+                <div className="flex flex-col items-center space-y-2 text-white/70">
+                    <span className="text-sm rotate-90 whitespace-nowrap mb-12 hidden sm:block">Scroll to explore</span>
+                    <div className="w-px h-12 sm:h-16 bg-white/30">
+                        <div className="w-px h-6 sm:h-8 bg-white animate-bounce"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {/* Next Section Indicator */}
+        <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-gray-50 to-transparent"></div>
+    </section>
 
             {/* Moving Brands Section */}
             <section className="w-full py-16 bg-white border-y border-gray-200 overflow-hidden">
@@ -497,7 +497,7 @@ const LandingPage = ({ onExplore, onOrder }) => {
             </section>
 
             {/* Statistics Section */}
-            <section className="w-full py-20 bg-gradient-to-r from-blue-50 to-indigo-50">
+            <section className="w-full py-20 bg-gradient-to-r from-blue-50 to-indigo-50 pt-24 mb:pt-0">
                 <div className="max-w-6xl mx-auto px-6">
                     <div className="text-center mb-12">
                         <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">

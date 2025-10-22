@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { carData } from '../data/carData.js';
+import { carData } from '../data/cardata.js';
 import SearchBar from '../components/Searchbar';
 import CarCard from '../components/CarCard';
 import Pagination from '../components/Pagination';
@@ -101,7 +101,7 @@ const CarListing = ({ onOrder, onHome, onExplore }) => {
         <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-8">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 {/* Header */}
-                <div className="text-center mb-12">
+                <div className="text-center mb-12 pt-24 mb:pt-0">
                     <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 bg-gradient-to-r from-blue-600 to-indigo-700 bg-clip-text text-transparent">
                         Explore Our Premium Collection
                     </h1>
